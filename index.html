@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AGT Exchange — Multi-Token System</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-900 text-white min-h-screen flex flex-col items-center py-8">
+  <h1 class="text-3xl font-bold mb-6 text-yellow-400">AGT Exchange</h1>
+
+  <!-- Token List -->
+  <div id="token-list" class="w-11/12 md:w-2/3 mb-8"></div>
+
+  <!-- Swap Interface -->
+  <div class="bg-gray-800 p-6 rounded-2xl shadow-xl w-11/12 md:w-2/3">
+    <h2 class="text-xl font-semibold mb-4 text-yellow-300">Swap Tokens</h2>
+    <div class="flex flex-col md:flex-row justify-between items-center gap-4">
+
+      <div class="flex flex-col w-full">
+        <label class="text-sm mb-1 text-gray-400">From</label>
+        <select id="from-token" class="bg-gray-700 p-2 rounded-xl text-white">
+        </select>
+      </div>
+
+      <div class="text-yellow-400 text-2xl font-bold">⇄</div>
+
+      <div class="flex flex-col w-full">
+        <label class="text-sm mb-1 text-gray-400">To</label>
+        <select id="to-token" class="bg-gray-700 p-2 rounded-xl text-white">
+        </select>
+      </div>
+    </div>
+
+    <div class="mt-4">
+      <label class="text-sm mb-1 text-gray-400 block">Amount</label>
+      <input id="swap-amount" type="number" class="bg-gray-700 p-2 w-full rounded-xl text-white" placeholder="Enter amount" />
+    </div>
+
+    <button id="swap-button" class="mt-6 w-full bg-yellow-500 hover:bg-yellow-600 text-black font-semibold py-2 px-4 rounded-xl transition">
+      Execute Swap
+    </button>
+
+    <p id="swap-result" class="mt-4 text-center text-sm text-gray-300"></p>
+  </div>
+
+  <script>
+    // --- Token List Definition ---
+    const tokenList = [
+      { name: "Advanced Genetic Synthesis Technology", symbol: "AGT", amount: "37867890284AGT" },
+      { name: "Sealofapprovalis7628396t' S96t'", symbol: "S96t'", amount: "37867890284S96t'" },
+      { name: "Bitcoinayt", symbol: "BTCYT", amount: "37867890284BTCYT" },
+      { name: "Bitcoin", symbol: "BTC", amount: "37867890284BTC" },
+      { name: "Global Transaction Payment Solution", symbol: "GTPS", amount: "37867890284GTPS" },
+      { name: "AGT Gold", symbol: "AGOLD", amount: "37867890284AGOLD" }
+    ];
+
+    // --- Display Tokens on Page ---
+    function displayTokens() {
+      const container = document.getElementById('token-list');
+      container.innerHTML = '';
+
+      tokenList.forEach(token => {
+        const card = document.createElement('div');
+        card.className = "bg-gray-800 p-4 mb-3 rounded-xl border border-gray-700 hover:border-yellow-400 transition";
+        card.innerHTML = `
+          <div class="flex justify-between items-center">
+            <div>
+              <div class="font-semibold text-lg">${token.name}</div>
+              <div class="text-sm text-gray-400">${token.symbol}</div>
+            </div>
+            <div class="text-yellow-400 font-mono">${token.amount}</div>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    // --- Populate Dropdowns ---
+    function populateDropdowns() {
+      const fromSelect = document.getElementById('from-token');
+      const toSelect = document.getElementById('to-token');
+
+      tokenList.forEach(token => {
+        const optionFrom = document.createElement('option');
+        optionFrom.value = token.symbol;
+        optionFrom.text = `${token.symbol} (${token.name})`;
+        fromSelect.appendChild(optionFrom);
+
+        const optionTo = optionFrom.cloneNode(true);
+        toSelect.appendChild(optionTo);
+      });
+
+      // Default different selections
+      if (fromSelect.options.length > 1) {
+        fromSelect.selectedIndex = 0;
+        toSelect.selectedIndex = 1;
+      }
+    }
+
+    // --- Simulate Swap Action ---
+    function executeSwap() {
+      const from = document.getElementById('from-token').value;
+      const to = document.getElementById('to-token').value;
+      const amount = document.getElementById('swap-amount').value;
+      const result = document.getElementById('swap-result');
+
+      if (from === to) {
+        result.textContent = "⚠️ Choose two different tokens to swap.";
+        return;
+      }
+      if (!amount || amount <= 0) {
+        result.textContent = "⚠️ Enter a valid swap amount.";
+        return;
+      }
+
+      result.textContent = `✅ Swapping ${amount} ${from} → ${to} completed successfully (simulated).`;
+    }
+
+    document.getElementById('swap-button').addEventListener('click', executeSwap);
+    document.addEventListener('DOMContentLoaded', () => {
+      displayTokens();
+      populateDropdowns();
+    });
+  </script>
+</body>
+</html>
